@@ -1,7 +1,8 @@
 module View exposing (view)
 
-import Collage exposing (collage, move, moveY, group, text)
+import Collage exposing (Form, collage, move, moveX, moveY, group, text)
 import Element exposing (toHtml)
+import Set
 import String
 import Text as T
 
@@ -26,10 +27,10 @@ view model =
 
         chHeight = toFloat Const.charHeight
         gmHeight = toFloat Const.gameHeight
+        chWidth = toFloat Const.charWidth
 
-        styleFn = T.monospace >> T.height Const.fontHeight >> text
         styledRows =
-            List.map styleFn rows
+            List.map textStyle rows
 
         translateFn r (i, rs) = (i + 1, (moveY (chHeight * i) r) :: rs)
         translatedRows = List.foldr translateFn (0, []) styledRows
@@ -37,16 +38,42 @@ view model =
 
         emptyGameBoard = group translatedRows
 
-        playerOffset = Debug.log "offset" <| translateCoord model.player
-        player = T.fromString "@"
-            |> styleFn
-            |> move playerOffset
+        player = renderObject "@" model.player
 
-        content = group [ emptyGameBoard, player ]
-            |> moveY (-1 * gmHeight * chHeight / 2.0)
+        robots = model.robots
+            |> Set.toList
+            |> List.map (renderObject "+")
+            |> group
+
+        junk = model.junk
+            |> Set.toList
+            |> List.map (renderObject "*")
+            |> group
+
+        gameBoard = group [ emptyGameBoard, robots, junk, player ]
+            |> moveY (-1 * (gmHeight + 1) * chHeight / 2.0)
+            |> moveX (-8 * chWidth)
+
+        content = group [ gameBoard ]
     in
         collage collageWidth collageHeight [ content ]
             |> toHtml
+
+
+textStyle : T.Text -> Form
+textStyle = T.monospace
+    >> T.height Const.fontHeight
+    >> text
+
+
+renderObject : String -> Int -> Form
+renderObject char coords =
+    let coords' = Model.intToCoord coords
+            |> translateCoord
+    in
+        T.fromString char
+            |> textStyle
+            |> move coords'
 
 
 translateCoord : Model.Coordinate -> (Float, Float)
@@ -58,3 +85,4 @@ translateCoord {x, y} =
         y' = (y + 1) * Const.charHeight
     in
         (x', y')
+
