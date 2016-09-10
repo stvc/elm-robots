@@ -9,7 +9,11 @@ import Update exposing (Direction(..), Msg(Move, NoOp, Skip, Teleport))
 
 
 subscriptions model =
-    Keyboard.downs keyToMsg
+    case model.alive of
+        True ->
+            Keyboard.downs keyToMsg
+        False ->
+            Sub.none
 
 
 keyToMsg : Keyboard.KeyCode -> Msg
