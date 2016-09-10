@@ -13,4 +13,23 @@ fontHeight = 16.0
 
 xCorrection = 5.0
 
+hudOffset = (30 * charWidth + 3, -4 * charHeight)
 
+instructionHudLines =
+    [ "y k u         "
+    , " \\|/          "
+    , "h- -l         "
+    , " /|\\          "
+    , "b j n         "
+    , ""
+    , "Commands:     "
+    , "              "
+    , ".: stand still"
+    , "t: teleport   "
+    , ""
+    , "Legend:       "
+    , ""
+    , "@: you        "
+    , "+: robot      "
+    , "*: junk       "
+    ]

@@ -33,10 +33,10 @@ view model =
             List.map textStyle rows
 
         translateFn r (i, rs) = (i + 1, (moveY (chHeight * i) r) :: rs)
-        translatedRows = List.foldr translateFn (0, []) styledRows
-            |> snd
 
-        emptyGameBoard = group translatedRows
+        emptyGameBoard = List.foldr translateFn (0, []) styledRows
+            |> snd
+            |> group
 
         player = renderObject "@" model.player
 
@@ -54,7 +54,15 @@ view model =
             |> moveY (-1 * (gmHeight + 1) * chHeight / 2.0)
             |> moveX (-8 * chWidth)
 
-        content = group [ gameBoard ]
+        hudLines = List.map (T.fromString >> textStyle)
+            <| Const.instructionHudLines
+
+        hud = List.foldr translateFn (0, []) hudLines
+            |> snd
+            |> group
+            |> move Const.hudOffset
+
+        content = group [ gameBoard, hud ]
     in
         collage collageWidth collageHeight [ content ]
             |> toHtml

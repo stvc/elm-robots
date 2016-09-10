@@ -76,9 +76,10 @@ update msg model =
                 newModel ! []
 
         Teleport ->
-            let newModel = model
+            let newModel' = model
                     |> movePlayerToRandomLoc
                     |> moveRobots
+                newModel = if model.alive then newModel' else model
             in
                 { newModel
                     | alive = not <| checkIfPlayerDies newModel
