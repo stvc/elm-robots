@@ -9,27 +9,33 @@ gameHeight = 23
 charWidth = 10
 charHeight = 18
 
-fontHeight = 16.0
+fontSize = 16.0
 
 xCorrection = 5.0
 
-hudOffset = (30 * charWidth + 3, -4 * charHeight)
+hudOffset = (32 * charWidth + 3, -10 * charHeight)
+
+instructionHudWidth = 16
 
 instructionHudLines =
-    [ "y k u         "
-    , " \\|/          "
-    , "h- -l         "
-    , " /|\\          "
-    , "b j n         "
+    [ "Movement:"
     , ""
-    , "Commands:     "
-    , "              "
+    , "y k u"
+    , " \\|/"
+    , "h- -l"
+    , " /|\\"
+    , "b j n"
+    , ""
+    , "Commands:"
+    , ""
     , ".: stand still"
-    , "t: teleport   "
+    , "t: teleport"
     , ""
-    , "Legend:       "
+    , "Legend:"
     , ""
-    , "@: you        "
-    , "+: robot      "
-    , "*: junk       "
+    , "@: you"
+    , "+: robot"
+    , "*: junk"
+    , ""
     ]
+

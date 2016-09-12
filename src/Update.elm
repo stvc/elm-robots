@@ -1,4 +1,4 @@
-module Update exposing (..)
+module Update exposing (Direction(..), Msg(..), init, update)
 
 import Basics.Extra exposing (never)
 import Maybe

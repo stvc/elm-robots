@@ -2,12 +2,16 @@ module View exposing (view)
 
 import Collage exposing (Form, collage, move, moveX, moveY, group, text)
 import Element exposing (toHtml)
+import Html exposing (div, button, br)
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import Set
 import String
 import Text as T
 
 import Constants as Const
 import Model
+import Update exposing (Msg(NewGame))
 
 
 view model =
@@ -54,8 +58,18 @@ view model =
             |> moveY (-1 * (gmHeight + 1) * chHeight / 2.0)
             |> moveX (-8 * chWidth)
 
-        hudLines = List.map (T.fromString >> textStyle)
-            <| Const.instructionHudLines
+
+        rawHudLines = Const.instructionHudLines ++
+            [ "Score: " ++ toString model.score
+            , "Level: " ++ toString model.level
+            , if model.alive then "Alive!" else "Dead!"
+            ]
+
+        renderHud = String.padRight Const.instructionHudWidth ' '
+            >> T.fromString
+            >> textStyle
+
+        hudLines = List.map renderHud rawHudLines
 
         hud = List.foldr translateFn (0, []) hudLines
             |> snd
@@ -63,14 +77,23 @@ view model =
             |> move Const.hudOffset
 
         content = group [ gameBoard, hud ]
-    in
-        collage collageWidth collageHeight [ content ]
+
+        gameHtml = collage collageWidth collageHeight [ content ]
             |> toHtml
+    in
+        div []
+            [ gameHtml
+            , br [] []
+            , button
+                [ style [("margin-left", "10px")]
+                , onClick NewGame ]
+                [ Html.text "New Game" ]
+            ]
 
 
 textStyle : T.Text -> Form
 textStyle = T.monospace
-    >> T.height Const.fontHeight
+    >> T.height Const.fontSize
     >> text
 
 
