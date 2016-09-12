@@ -2,8 +2,8 @@ module View exposing (view)
 
 import Collage exposing (Form, collage, move, moveX, moveY, group, text)
 import Element exposing (toHtml)
-import Html exposing (div, button, br)
-import Html.Attributes exposing (style)
+import Html exposing (a, br, button, div, h1, p)
+import Html.Attributes exposing (href, style)
 import Html.Events exposing (onClick)
 import Set
 import String
@@ -81,13 +81,23 @@ view model =
         gameHtml = collage collageWidth collageHeight [ content ]
             |> toHtml
     in
-        div []
-            [ gameHtml
+        div [ style
+                [ ("margin-left", "10px")
+                , ("font-family", "monospace")
+                ]
+            ]
+            [ h1 [ style [("font-family", "monospace")] ]
+                [ Html.text "Robots" ]
+            , gameHtml
             , br [] []
             , button
                 [ style [("margin-left", "10px")]
                 , onClick NewGame ]
                 [ Html.text "New Game" ]
+            , br [] []
+            , p []
+                [ a [ href "https://github.com/stvc/elm-robots" ] [ Html.text "Source code" ]
+                ]
             ]
 
 
